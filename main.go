@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"flag"
 	"log"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -39,27 +40,37 @@ func main() {
 
 	n, _ := strconv.Atoi(strings.Split(version, ".")[2])
 
-	err = exec.Command("git", "add", ".").Run()
+	cmd = exec.Command("git", "add", ".")
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = exec.Command("git", "commit", "-m", *msg).Run()
+	cmd = exec.Command("git", "commit", "-m", *msg)
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = exec.Command("git", "tag", "v0.0."+strconv.Itoa(n+1), "master").Run()
+	cmd = exec.Command("git", "tag", "v0.0."+strconv.Itoa(n+1), "master")
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = exec.Command("git", "push", "-u", "origin", "v0.0."+strconv.Itoa(n+1)).Run()
+	cmd = exec.Command("git", "push", "-u", "origin", "v0.0."+strconv.Itoa(n+1))
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = exec.Command("git", "push").Run()
+	cmd = exec.Command("git", "push")
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
